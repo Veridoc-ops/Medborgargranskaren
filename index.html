@@ -334,76 +334,16 @@
   </div>
 
 <script>
-/**
- * =====================================================
- * DATA
- * =====================================================
- * Drive-test:
- * - Du kan lägga in Drive-länkar i url per dokument.
- * - Om url saknas men filename finns → auto-länk till /docs/<filnamn> (GitHub Pages).
- * =====================================================
- */
-
 const SITE = {
   title: "Medborgargranskning – neutral dokumentation",
   subtitle: "Fakta • Metod • Offentlighetsprincipen • Transparens",
   contact: { email: "tjohansson121@gmail.com" },
-  text: {
-    lead:
-      "En dokumentdriven genomgång av hur den kommunala kontrollkedjan fungerar i praktiken: årsredovisning, revision, lekmannarevision och politiska beslut om ansvarsfrihet.",
-    intro:
-`Den här webbplatsen dokumenterar och förklarar den kommunala besluts- och kontrollprocessen kring kommunala bolag, med särskilt fokus på årsredovisning, revision och politiska beslut om ansvarsfrihet.
-
-Innehållet bygger uteslutande på offentliga handlingar: årsredovisningar, revisionsberättelser, lekmannarevisorernas granskningsrapporter samt protokoll och tjänsteskrivelser från kommunstyrelse och kommunfullmäktige.
-
-Syftet är att samla, strukturera och tillgängliggöra dessa handlingar så att medborgare, journalister och andra intresserade kan följa processen från bolag till politiskt beslut.
-
-Webbplatsen är opolitisk och dokumentdriven. Inga personer pekas ut och inga antaganden görs om motiv, ansvar eller brottslighet. Eventuella brottsutredningar hanteras av rättsvårdande myndigheter och behandlas inte här.
-
-Informationen publiceras i folkbildande syfte: för att visa hur den kommunala kontrollkedjan är tänkt att fungera och hur den faktiskt ser ut i formella handlingar.`,
-    process:
-`Steg 1: Det kommunala bolaget
-Kommunala bolag är aktiebolag som ägs av kommunen, ofta via ett moderbolag. De leds av styrelse och verkställande direktör och omfattas av aktiebolagslagen. Varje år upprättar bolaget en årsredovisning som redovisar ekonomi, verksamhet och förvaltning för det gångna året.
-
-Steg 2: Auktoriserad revision
-Årsredovisningen granskas av en auktoriserad revisor enligt aktiebolagslagen. Revisorn bedömer om redovisningen ger en rättvisande bild och om styrelse och VD kan tillstyrkas ansvarsfrihet. Revisionen avser formell redovisning och laglighet – inte politiska eller straffrättsliga bedömningar.
-
-Steg 3: Lekmannarevision
-Parallellt granskar lekmannarevisorer verksamheten på uppdrag av kommunfullmäktige. De bedömer om verksamheten är ändamålsenlig, ekonomiskt tillfredsställande och om den interna kontrollen är tillräcklig. Lekmannarevisionen är en del av den kommunala ägarstyrningen.
-
-Steg 4: Kommunstyrelsen
-Kommunstyrelsen bereder ärendet, vanligtvis genom kommunstyrelsekontoret. Tjänsteskrivelser sammanfattar bolagets handlingar och revisionens bedömningar samt innehåller förslag till beslut.
-
-Steg 5: Kommunfullmäktige
-Kommunfullmäktige fattar slutligt beslut i ägarfrågor, såsom godkännande av årsredovisning och ansvarsfrihet. Eventuellt jäv ska anmälas och hanteras enligt regelverket.
-
-Vad ansvarsfrihet innebär – och inte innebär
-Ansvarsfrihet innebär att ägaren godkänner förvaltningen för det aktuella räkenskapsåret och att inga krav riktas mot styrelse eller VD utifrån det granskade materialet.
-Ansvarsfrihet innebär inte att straffrättsligt ansvar prövas, att framtida ansvar utesluts eller att andra myndigheters granskning ersätts.`,
-    press:
-`Detta är ett dokumentdrivet medborgarprojekt som samlar och strukturerar offentliga handlingar kopplade till kommunala bolag och den formella kedjan fram till beslut om ansvarsfrihet.
-
-Arbetet syftar till att dokumentera och förklara processen – inte att peka ut ansvar eller dra slutsatser om brottslighet.
-
-Materialet omfattar typiskt: bolagshandlingar (årsredovisningar), revisionsberättelser, lekmannarevisorernas granskningsrapporter samt protokoll/tjänsteskrivelser från kommunstyrelse och kommunfullmäktige.
-
-Resultatet är ett verifierat och strukturerat underlag som visar hur systemet fungerar på papper och vilka bedömningar som görs i respektive steg.
-
-Underlaget kan användas som faktastöd, bakgrund eller startpunkt för vidare journalistisk granskning.`
-  },
   disclaimers: {
     neutral:
       "Den här webbplatsen är opolitisk och dokumentdriven. Inga personer tillskrivs skuld. Endast verifierbara handlingar och beslut redovisas.",
     work:
       "Arbetsytan är ett pågående spårnings- och strukturmaterial. Den kan innehålla frågor och luckor. Det är inte en färdig slutsats."
-  },
-  externalTools: [
-    {
-      name: "Kommunala inköp/fakturor (extern sök)",
-      url: "https://kommun.jensnylander.com/",
-      note: "Externt verktyg för att hitta spår. Uppgifter behöver alltid verifieras mot originalhandling."
-    }
-  ]
+  }
 };
 
 const STATUS = {
@@ -421,7 +361,6 @@ const THREADS = [
 ];
 
 const DOCUMENTS = [
-  // Exempel/förberedda dokument (länkas via /docs om du har dem där)
   {
     id: "ks-2025-03-17",
     title: "Kommunstyrelsen – Protokoll 2025-03-17",
@@ -429,9 +368,8 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Protokoll",
     ref: "Kommunstyrelsen",
-    filename: "Protokoll kommunstyrelsen 2025-03-17.pdf",
     url: "",
-    notes: "",
+    notes: "Länk saknas i testläget (lägg in Drive-länk om du vill kunna öppna här).",
     status: "received",
     source: "Offentlig handling"
   },
@@ -442,16 +380,13 @@ const DOCUMENTS = [
     thread: "sb",
     type: "Styrelseprotokoll",
     ref: "Stadsbacken AB",
-    filename: "Stadsbacken AB 2025-12-05 styrelseprotokoll.pdf",
     url: "",
-    notes: "",
+    notes: "Länk saknas i testläget (lägg in Drive-länk om du vill kunna öppna här).",
     status: "received",
     source: "Offentlig handling"
   },
 
-  // =========================
   // TEST: GR-länkar via Drive
-  // =========================
   {
     id: "nk-gr-holding-2024",
     title: "Norra Kajen Holding AB – Granskningsrapport 2024 (lekmannarevisor)",
@@ -459,7 +394,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Holding_AB.pdf",
     url: "https://drive.google.com/file/d/15LyYMffDzvKLNo5im_M4EaDEGpteDdfC/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -472,7 +406,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Exploatering_AB.pdf",
     url: "https://drive.google.com/file/d/1X9NMOco2qhqdGmVsPqG2jbRfqSb-ig0x/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -485,7 +418,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Utveckling_AB.pdf",
     url: "https://drive.google.com/file/d/1CjiQ44uG4V9YgyfDj2hUNIOvEa-ullut/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -498,7 +430,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Kvarter_3_AB.pdf",
     url: "https://drive.google.com/file/d/1JFGk94LhqcFXMoVrEwlNV7yiTiRQ3c9r/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -511,7 +442,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Kvarter_8_AB.pdf",
     url: "https://drive.google.com/file/d/1Ceb1TYQjdV7At8QMnHwFxMJYsq78JtiN/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -524,7 +454,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Kvarter_11_AB.pdf",
     url: "https://drive.google.com/file/d/1zAezMtHuXW5arfKO1yM7311zMub8WVM2/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -537,7 +466,6 @@ const DOCUMENTS = [
     thread: "nk",
     type: "Granskningsrapport",
     ref: "Lekmannarevision",
-    filename: "GR Norra_Kajen_Kvarter_13_AB.pdf",
     url: "https://drive.google.com/file/d/1N-TwPzRjfQbq1zeBTY_o-k0U1mdzmoXI/view?usp=drive_link",
     notes: "Testpublicering: länk via Google Drive.",
     status: "received",
@@ -555,11 +483,6 @@ const TIMELINE = [
   }
 ];
 
-/**
- * =====================================================
- * HELPERS / ROUTER
- * =====================================================
- */
 const $ = (sel) => document.querySelector(sel);
 
 function setActiveNav(path){
@@ -613,7 +536,7 @@ function renderHero({title, desc, chips=[]}){
 function renderToolbar(){
   return `
     <div class="toolbar">
-      <input id="q" type="search" placeholder="Sök (titel, bolag, datum, typ, filnamn)…" />
+      <input id="q" type="search" placeholder="Sök (titel, bolag, datum, typ)…" />
       <select id="filterThread">
         <option value="">Alla trådar</option>
         ${THREADS.filter(t=>t.id!=="next").map(t=>`<option value="${t.id}">${escapeHtml(t.name)}</option>`).join("")}
@@ -640,7 +563,7 @@ function applyFilters(items){
   return items.filter(it=>{
     const hay = [
       it.title, it.date, it.type, it.ref, it.notes, it.source,
-      it.filename || "", threadName(it.thread)
+      threadName(it.thread)
     ].join(" ").toLowerCase();
 
     if(q && !hay.includes(q)) return false;
@@ -651,11 +574,12 @@ function applyFilters(items){
   });
 }
 
+/**
+ * FIX: Inget /docs-fallback.
+ * För externa filer (Drive) ska url alltid vara ifylld, annars visas "Ingen länk ännu".
+ */
 function docUrl(d){
-  if(d.url && d.url.trim() && d.url !== "DIN_VERIDOCS_LÄNK_HÄR") return d.url.trim();
-  if(d.filename && d.filename.trim()){
-    return "docs/" + encodeURIComponent(d.filename.trim()).replaceAll("%2F","/");
-  }
+  if(d.url && d.url.trim()) return d.url.trim();
   return "";
 }
 
@@ -684,7 +608,6 @@ function renderDocumentsList(items){
           </div>
           <div class="row">
             ${d.ref ? `<span class="pill"><strong>Ref:</strong> ${escapeHtml(d.ref)}</span>` : ""}
-            ${d.filename ? `<span class="pill"><strong>Fil:</strong> ${escapeHtml(d.filename)}</span>` : ""}
           </div>
           ${d.notes ? `<div class="note">${escapeHtml(d.notes)}</div>` : ""}
         </div>
@@ -723,8 +646,8 @@ function renderTimeline(items){
 }
 
 function isPublicDoc(d){
-  const u = docUrl(d);
-  return d.status === "received" || Boolean(u);
+  // Publikt: mottagen eller har länk
+  return d.status === "received" || Boolean(docUrl(d));
 }
 
 function updateStatusBanner(){
@@ -741,7 +664,7 @@ function updateStatusBanner(){
   `;
 
   $("#statusText").textContent =
-    "Sidan visar en pågående genomgång av offentliga handlingar kopplade till kommunala bolag. " +
+    "Sidan visar en pågående genomgång av offentliga handlingar. " +
     "Publik vy innehåller mottagna handlingar och källhänvisningar. Arbetsytan visar spårning och struktur. " +
     "Inga slutsatser om skuld publiceras här.";
 }
@@ -760,11 +683,6 @@ function threadStats(threadId){
   return { total: docs.length, received, requested };
 }
 
-/**
- * =====================================================
- * PAGES
- * =====================================================
- */
 function renderHome(){
   setActiveNav("/home");
   renderHero({
@@ -778,7 +696,10 @@ function renderHome(){
   $("#mainCard").innerHTML = `
     <h3>Översikt</h3>
     <div class="item">
-      <div class="note">${escapeHtml(SITE.text.lead)}</div>
+      <div class="note">
+        En dokumentdriven genomgång av hur den kommunala kontrollkedjan fungerar i praktiken:
+        årsredovisning, revision, lekmannarevision och politiska beslut om ansvarsfrihet.
+      </div>
       <div class="btnRow">
         <a class="btn" href="#/public">Gå till Fakta (publikt)</a>
         <a class="btn secondary" href="#/method">Läs Metod</a>
@@ -837,34 +758,13 @@ function renderHome(){
   `;
 
   $("#sideCard").innerHTML = `
-    <h3>Vad är detta?</h3>
-    <div class="successBox">
-      <div class="small">
-        <strong>Dokumentdriven sammanställning.</strong><br/>
-        Vi publicerar enbart sådant som kan hänvisas till offentliga handlingar och beslut.
-      </div>
-    </div>
-
+    <h3>Viktigt</h3>
     <div class="warningBox">
-      <div class="small">
-        <strong>Inga slutsatser om skuld.</strong><br/>
-        Inga personer pekas ut. Vi beskriver process och handlingar — inte motiv eller brottsligt ansvar.
-      </div>
+      <div class="small"><strong>Om en länk saknas:</strong> dokumentet är registrerat men inte upplänkat ännu (Drive-länk läggs in senare).</div>
     </div>
 
-    <div class="hr"></div>
-    <h3>Verktyg & källor</h3>
-    <div class="item">
-      <div class="note">Externa verktyg kan ge spår – allt behöver verifieras mot originalhandling.</div>
-      <div class="list">
-        ${SITE.externalTools.map(t=>`
-          <div class="item">
-            <h4>${escapeHtml(t.name)}</h4>
-            <div class="note">${escapeHtml(t.note)}</div>
-            <div class="row"><span class="pill"><a href="${t.url}" target="_blank" rel="noopener">Öppna</a></span></div>
-          </div>
-        `).join("")}
-      </div>
+    <div class="successBox">
+      <div class="small"><strong>Neutralitet:</strong> Inga personer pekas ut. Inga motiv antas. Dokument först.</div>
     </div>
 
     <div class="hr"></div>
@@ -895,21 +795,13 @@ function renderPublic(){
   `;
 
   $("#sideCard").innerHTML = `
-    <h3>Så läser du sidan</h3>
+    <h3>Testläge (Drive)</h3>
     <div class="item">
       <div class="note">
-        <strong>Mottagen</strong> = handlingen är utlämnad och kan redovisas.<br/>
-        <strong>Begärd</strong> = handlingen är begärd enligt offentlighetsprincipen.<br/>
-        <strong>Arbetsyta</strong> = pågående spårning (inga slutsatser).<br/>
+        Dokument kan vara registrerade utan länk. Då visas <em>“Ingen länk ännu”</em>.
+        Drive-länkar läggs in successivt.
       </div>
     </div>
-
-    <details style="margin-top:12px">
-      <summary>Testläge (Drive)</summary>
-      <div class="note">
-        Vissa dokument länkas via Google Drive för att undvika GitHub:s filstorleksgränser.
-      </div>
-    </details>
 
     <div class="hr"></div>
     <h3>Kontakt</h3>
@@ -947,32 +839,12 @@ function renderWork(){
     <p class="muted">${escapeHtml(SITE.disclaimers.work)}</p>
     ${renderToolbar()}
     <div class="list" id="workDocs"></div>
-
-    <div class="hr"></div>
-    <h3>Öppna frågor (mall)</h3>
-    <div class="item">
-      <h4>Exempel: frågor att besvara med handlingar</h4>
-      <div class="note">
-        • Vilka handlingar ligger till grund för beslut om ansvarsfrihet per bolag?<br/>
-        • Finns granskningsrapport/revisionsberättelse och vilka iakttagelser görs (om några)?<br/>
-        • Om maskning sker: vilket lagrum anges, och vilka delar maskas?<br/>
-        • Finns tidslinje mellan rapport → beslut → uppföljning?
-      </div>
-    </div>
   `;
 
   $("#sideCard").innerHTML = `
     <h3>Neutralitetslöfte</h3>
     <div class="successBox">
       <div class="small">${escapeHtml(SITE.disclaimers.neutral)}</div>
-    </div>
-
-    <div class="hr"></div>
-    <h3>Praktiskt</h3>
-    <div class="item">
-      <div class="note">
-        Lägg nya dokument som nya objekt i <code class="inline">DOCUMENTS</code>. För Drive: klistra in länken i <code class="inline">url</code>.
-      </div>
     </div>
   `;
 
@@ -998,32 +870,23 @@ function renderMethod(){
   });
 
   $("#mainCard").innerHTML = `
-    <h3>Syfte och avgränsning</h3>
+    <h3>Grundprinciper</h3>
     <div class="item">
-      <div class="note">${escapeHtml(SITE.text.intro).replaceAll("\n\n","<br/><br/>").replaceAll("\n","<br/>")}</div>
-    </div>
-
-    <h3 style="margin-top:12px">Så går processen till</h3>
-    <div class="item">
-      <div class="note">${escapeHtml(SITE.text.process).replaceAll("\n\n","<br/><br/>").replaceAll("\n","<br/>")}</div>
+      <div class="note">
+        <strong>1) Dokument först.</strong> Uppgifter publiceras bara när de kan hänvisas till en handling.<br/><br/>
+        <strong>2) Inga skuldutpekanden.</strong> Inga personer pekas ut. Inga motiv tillskrivs.<br/><br/>
+        <strong>3) Tydlig skillnad mellan fakta och process.</strong> Vi beskriver beslutskedja och dokument, inte spekulation.<br/><br/>
+        <strong>4) Rättelser är synliga.</strong> Vid fel rättas det öppet.
+      </div>
     </div>
   `;
 
   $("#sideCard").innerHTML = `
-    <h3>Publiceringsregel</h3>
+    <h3>Offentlighetsprincipen</h3>
     <div class="item">
       <div class="note">
-        Publik vy visar mottagna dokument och dokument med länk.
-        Arbetsytan kan innehålla pågående spårning och frågor utan slutsatser.
-      </div>
-    </div>
-
-    <div class="hr"></div>
-    <h3>Språkpolicy</h3>
-    <div class="item">
-      <div class="note">
-        Vi skriver “i handlingen framgår …”, inte “de försökte …”.<br/>
-        Vi skriver “maskning enligt lagrum …” om det finns, inte “mörkning”.
+        Begäran om allmän handling görs enligt <strong>Tryckfrihetsförordningen, 2 kap.</strong>
+        Vid maskning/avslag ska lagrum anges och formellt beslut kunna begäras.
       </div>
     </div>
   `;
@@ -1033,45 +896,17 @@ function renderAbout(){
   setActiveNav("/about");
   renderHero({
     title: "Om / Press",
-    desc: "Vem sidan är till för, vad som publiceras och hur materialet kan användas.",
+    desc: "Vad sidan är till för och hur underlaget kan användas – utan personfokus.",
     chips: ["Opolitiskt", "Dokumentdrivet", "Kontakt"]
   });
 
   $("#mainCard").innerHTML = `
-    <h3>Om</h3>
-    <div class="item">
-      <div class="note">
-        Den här webbplatsen är ett medborgarprojekt som gör offentliga handlingar mer tillgängliga genom struktur och förklaring.
-        Innehållet är dokumentdrivet och avstår från personfokus och spekulation.
-      </div>
-    </div>
-
-    <h3 style="margin-top:12px">Pågående granskningar</h3>
-    <div class="cards">
-      ${THREADS.map(t=>{
-        const st = (t.id==="next") ? null : threadStats(t.id);
-        return `
-          <div class="bigCard">
-            <h4>${escapeHtml(t.name)}</h4>
-            <p>${escapeHtml(t.summary)}</p>
-            <div class="row">
-              ${t.tags.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}
-              ${st ? `<span class="pill"><strong>Dokument:</strong> ${st.total}</span>` : ""}
-              ${st ? `<span class="pill"><strong>Mottagna:</strong> ${st.received}</span>` : ""}
-              ${st ? `<span class="pill"><strong>Begärda:</strong> ${st.requested}</span>` : ""}
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-
-    <div class="hr"></div>
     <h3>För journalister</h3>
     <div class="item">
-      <div class="note">${escapeHtml(SITE.text.press).replaceAll("\n\n","<br/><br/>").replaceAll("\n","<br/>")}</div>
-      <div class="row">
-        <span class="pill"><strong>Vad finns här?</strong> dokumentpaket + struktur + tidslinje</span>
-        <span class="pill"><strong>Vad finns inte?</strong> slutsatser om skuld/brott</span>
+      <div class="note">
+        Detta är ett dokumentdrivet medborgarprojekt som samlar och strukturerar offentliga handlingar kopplade till kommunala bolag och den formella kedjan fram till beslut om ansvarsfrihet.<br/><br/>
+        Arbetet syftar till att dokumentera och förklara processen – inte att peka ut ansvar eller dra slutsatser om brottslighet.<br/><br/>
+        Underlaget kan användas som faktastöd, bakgrund eller startpunkt för vidare journalistisk granskning.
       </div>
     </div>
 
@@ -1089,29 +924,11 @@ function renderAbout(){
   `;
 
   $("#sideCard").innerHTML = `
-    <h3>Snabbt för redaktion</h3>
-    <div class="successBox">
+    <h3>Snabbnotis</h3>
+    <div class="warningBox">
       <div class="small">
-        <strong>Det här är research-infrastruktur.</strong><br/>
-        Dokument är strukturerade, sökbara och spårbara. Ni kan själva vinkla — här finns underlaget.
+        Om en post saknar länk betyder det bara att dokumentet ännu inte är upplänkat (Drive-länk kommer).
       </div>
-    </div>
-
-    <div class="hr"></div>
-    <h3>Teknik</h3>
-    <div class="item">
-      <div class="note">
-        Drive-test: vissa dokument länkas externt. Övriga kan ligga i <code class="inline">/docs</code> och länkas via filnamn.
-      </div>
-    </div>
-
-    <div class="hr"></div>
-    <h3>Verktyg</h3>
-    <div class="item">
-      <div class="note">Externa verktyg (spår → verifiera mot original):</div>
-      ${SITE.externalTools.map(t=>`
-        <div class="row"><span class="pill"><a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(t.name)}</a></span></div>
-      `).join("")}
     </div>
   `;
 }
