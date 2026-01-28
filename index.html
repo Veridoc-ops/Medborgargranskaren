@@ -73,8 +73,56 @@
       box-shadow: 0 0 0 3px rgba(125,211,252,.12);
     }
 
-    .hero{
+    /* NEW: Neutral “pågående” banner */
+    .statusBanner{
       margin-top:18px;
+      padding:16px 16px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(125,211,252,.28);
+      background: linear-gradient(180deg, rgba(125,211,252,.10), rgba(17,24,38,.55));
+      box-shadow: var(--shadow);
+    }
+    .statusTop{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .statusTitle{
+      display:flex; align-items:center; gap:10px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .statusTitle .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(125,211,252,.10);
+      border: 1px solid rgba(125,211,252,.25);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .statusTitle .pulse{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--warn);
+      box-shadow: 0 0 0 0 rgba(251,191,36,.45);
+      animation: pulse 1.6s infinite;
+      margin-top: 2px;
+    }
+    @keyframes pulse{
+      0%{box-shadow: 0 0 0 0 rgba(251,191,36,.45)}
+      70%{box-shadow: 0 0 0 10px rgba(251,191,36,0)}
+      100%{box-shadow: 0 0 0 0 rgba(251,191,36,0)}
+    }
+    .statusText{
+      color: var(--muted);
+      line-height: 1.55;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .statusMetrics{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px;
+    }
+
+    .hero{
+      margin-top:14px;
       padding:20px;
       border:1px solid var(--line);
       border-radius: var(--radius);
@@ -196,6 +244,7 @@
     details{border:1px solid var(--line); border-radius:14px; padding:10px 12px; background: rgba(10,14,20,.25)}
     summary{cursor:pointer; font-weight:600}
     code.inline{font-family:var(--mono); font-size: 12px; background: rgba(10,14,20,.45); padding: 2px 6px; border-radius: 8px; border:1px solid rgba(169,180,192,.2)}
+    .small{font-size:12px}
   </style>
 </head>
 <body>
@@ -215,6 +264,22 @@
         <a class="tab" href="#/about" id="nav-about">Om</a>
       </nav>
     </header>
+
+    <!-- NEW: Neutral status/banner (auto-text via JS) -->
+    <section class="statusBanner" id="statusBanner" aria-label="Status">
+      <div class="statusTop">
+        <div class="statusTitle">
+          <span class="badge"><span class="pulse" aria-hidden="true"></span>Pågående dokumentinsamling</span>
+          <span class="muted">– “detta granskas just nu”</span>
+        </div>
+        <div class="statusMetrics" id="statusMetrics"></div>
+      </div>
+      <div class="statusText" id="statusText">
+        Den här sidan visar en pågående genomgång av offentliga handlingar kopplade till kommunala bolag.
+        Vissa dokument har mottagits och redovisas publikt. Andra har begärts ut och inväntas.
+        Inga slutsatser dras innan relevanta handlingar har granskats.
+      </div>
+    </section>
 
     <section class="hero" id="hero">
       <h2 id="pageTitle">Laddar…</h2>
@@ -254,7 +319,7 @@ const SITE = {
   title: "Medborgargranskning – neutral dokumentation",
   subtitle: "Fakta • Metod • Offentlighetsprincipen • Transparens",
   contact: {
-    email: "tjohansson121@gmail.com" // byt gärna till en egen adress
+    email: "tjohansson121@gmail.com"
   },
   disclaimers: {
     neutral:
@@ -423,7 +488,6 @@ function setActiveNav(path){
 
 function fmtDate(iso){
   if(!iso) return "";
-  // allow "2025" shorthand
   if(/^\d{4}$/.test(iso)) return iso;
   const parts = iso.split("-").map(x=>parseInt(x,10));
   const [y,m,d] = [parts[0], parts[1]||1, parts[2]||1];
@@ -565,6 +629,34 @@ function isPublicDoc(d){
   return d.status === "received" || hasRealUrl;
 }
 
+/* NEW: Banner metrics */
+function updateStatusBanner(){
+  const total = DOCUMENTS.length;
+  const received = DOCUMENTS.filter(d => d.status === "received").length;
+  const requested = DOCUMENTS.filter(d => d.status === "requested").length;
+  const other = total - received - requested;
+
+  const metrics = [
+    { label: "Mottagna", value: received, dot: "good" },
+    { label: "Begärda", value: requested, dot: "warn" },
+    { label: "Övriga status", value: other, dot: "warn" }
+  ];
+
+  const el = $("#statusMetrics");
+  if(!el) return;
+  el.innerHTML = metrics.map(m => `
+    <span class="chip"><span class="dot ${m.dot}"></span>${m.label}: ${m.value}</span>
+  `).join("");
+
+  const text = $("#statusText");
+  if(text){
+    text.textContent =
+      "Den här sidan visar en pågående genomgång av offentliga handlingar kopplade till kommunala bolag. " +
+      "Vissa dokument har mottagits och redovisas publikt. Andra har begärts ut och inväntas. " +
+      "Inga slutsatser dras innan relevanta handlingar har granskats.";
+  }
+}
+
 function renderPublic(){
   setActiveNav("/public");
   renderHero({
@@ -588,7 +680,16 @@ function renderPublic(){
 
   const side = $("#sideCard");
   side.innerHTML = `
-    <h3>Snabbt: så använder du sidan</h3>
+    <h3>Så läser du sidan</h3>
+    <div class="item">
+      <div class="note">
+        <strong>Mottagen</strong> = handlingen är utlämnad och kan redovisas.<br/>
+        <strong>Begärd</strong> = handlingen är begärd enligt offentlighetsprincipen.<br/>
+        <strong>Arbetsyta</strong> = pågående spårning (inga slutsatser).<br/>
+        <strong>Fakta</strong> = verifierat material.
+      </div>
+    </div>
+
     <div class="successBox">
       <div><strong>Publik del = verifierat.</strong></div>
       <div class="muted small" style="margin-top:6px">
@@ -833,6 +934,7 @@ function route(){
 }
 
 window.addEventListener("hashchange", route);
+updateStatusBanner();
 route();
 </script>
 </body>
