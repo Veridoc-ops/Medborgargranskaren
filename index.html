@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Medborgargranskning – neutral dokumentation</title>
-  <meta name="description" content="Neutral, dokumentdriven medborgargranskning. Fakta, metod och öppen spårning av begärda handlingar." />
+  <meta name="description" content="Neutral, dokumentdriven medborgargranskning. Metod, källor och öppen spårning av offentliga handlingar." />
   <style>
     :root{
       --bg:#0b0f14;
@@ -73,7 +73,7 @@
       box-shadow: 0 0 0 3px rgba(125,211,252,.12);
     }
 
-    /* NEW: Neutral “pågående” banner */
+    /* Status/banner */
     .statusBanner{
       margin-top:18px;
       padding:16px 16px;
@@ -131,6 +131,7 @@
     }
     .hero h2{margin:0 0 8px; font-size:20px}
     .hero p{margin:0; color:var(--muted); line-height:1.5}
+
     .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; margin-top:14px}
     @media (max-width: 920px){ .grid{grid-template-columns:1fr} header{position:static} }
 
@@ -157,6 +158,7 @@
     .dot.good{background:var(--good)}
     .dot.warn{background:var(--warn)}
     .dot.bad{background:var(--bad)}
+
     .toolbar{
       display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:10px 0 0;
     }
@@ -178,6 +180,7 @@
       color: var(--text);
       outline:none;
     }
+
     .list{display:flex; flex-direction:column; gap:10px; margin-top:12px}
     .item{
       border:1px solid var(--line);
@@ -204,7 +207,7 @@
     .note{
       margin-top:10px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
       font-size: 13px;
     }
     .hr{height:1px; background: var(--line); margin:12px 0}
@@ -245,6 +248,37 @@
     summary{cursor:pointer; font-weight:600}
     code.inline{font-family:var(--mono); font-size: 12px; background: rgba(10,14,20,.45); padding: 2px 6px; border-radius: 8px; border:1px solid rgba(169,180,192,.2)}
     .small{font-size:12px}
+
+    /* Home “löpsedel” cards */
+    .cards{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; margin-top:12px}
+    @media (max-width: 920px){ .cards{grid-template-columns:1fr} }
+    .bigCard{
+      border:1px solid var(--line);
+      background: rgba(15,22,34,.55);
+      border-radius: 16px;
+      padding:14px;
+      box-shadow: var(--shadow);
+    }
+    .bigCard h4{margin:0 0 6px; font-size:14px}
+    .bigCard p{margin:0; color:var(--muted); font-size:13px; line-height:1.5}
+    .bigCard .row{margin-top:10px}
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(125,211,252,.30);
+      background: rgba(125,211,252,.08);
+      color: var(--text);
+      font-size: 13px;
+      cursor:pointer;
+      user-select:none;
+      text-decoration:none;
+    }
+    .btn.secondary{
+      border-color: rgba(169,180,192,.25);
+      background: rgba(10,14,20,.25);
+    }
   </style>
 </head>
 <body>
@@ -258,27 +292,23 @@
         </div>
       </div>
       <nav aria-label="Huvudmeny">
+        <a class="tab" href="#/home" id="nav-home">Startsida</a>
         <a class="tab" href="#/public" id="nav-public">Fakta (publikt)</a>
         <a class="tab" href="#/work" id="nav-work">Arbetsyta</a>
         <a class="tab" href="#/method" id="nav-method">Metod</a>
-        <a class="tab" href="#/about" id="nav-about">Om</a>
+        <a class="tab" href="#/about" id="nav-about">Om / Press</a>
       </nav>
     </header>
 
-    <!-- NEW: Neutral status/banner (auto-text via JS) -->
     <section class="statusBanner" id="statusBanner" aria-label="Status">
       <div class="statusTop">
         <div class="statusTitle">
           <span class="badge"><span class="pulse" aria-hidden="true"></span>Pågående dokumentinsamling</span>
-          <span class="muted">– “detta granskas just nu”</span>
+          <span class="muted">– saklig publicering, inga slutsatser om skuld</span>
         </div>
         <div class="statusMetrics" id="statusMetrics"></div>
       </div>
-      <div class="statusText" id="statusText">
-        Den här sidan visar en pågående genomgång av offentliga handlingar kopplade till kommunala bolag.
-        Vissa dokument har mottagits och redovisas publikt. Andra har begärts ut och inväntas.
-        Inga slutsatser dras innan relevanta handlingar har granskats.
-      </div>
+      <div class="statusText" id="statusText"></div>
     </section>
 
     <section class="hero" id="hero">
@@ -295,7 +325,7 @@
     <div class="footer">
       <div class="hr"></div>
       <div>
-        <strong>Publiceringsprincip:</strong> Inga personer pekas ut. Inga motiv tillskrivs. Endast dokumenterade beslut, datum, och källor.
+        <strong>Publiceringsprincip:</strong> Inga personer pekas ut. Inga motiv tillskrivs. Endast dokumenterade beslut, datum och källor.
         Vid osäkerhet markeras det tydligt som osäkert.
       </div>
       <div style="margin-top:8px">
@@ -321,12 +351,62 @@ const SITE = {
   contact: {
     email: "tjohansson121@gmail.com"
   },
+  text: {
+    lead:
+      "En dokumentdriven genomgång av hur den kommunala kontrollkedjan fungerar i praktiken: årsredovisning, revision, lekmannarevision och politiska beslut om ansvarsfrihet.",
+    intro:
+`Den här webbplatsen dokumenterar och förklarar den kommunala besluts- och kontrollprocessen kring kommunala bolag, med särskilt fokus på årsredovisning, revision och politiska beslut om ansvarsfrihet.
+
+Innehållet bygger uteslutande på offentliga handlingar: årsredovisningar, revisionsberättelser, lekmannarevisorernas granskningsrapporter samt protokoll och tjänsteskrivelser från kommunstyrelse och kommunfullmäktige.
+
+Syftet är att samla, strukturera och tillgängliggöra dessa handlingar så att medborgare, journalister och andra intresserade kan följa processen från bolag till politiskt beslut.
+
+Webbplatsen är opolitisk och dokumentdriven. Inga personer pekas ut och inga antaganden görs om motiv, ansvar eller brottslighet. Eventuella brottsutredningar hanteras av rättsvårdande myndigheter och behandlas inte här.
+
+Informationen publiceras i folkbildande syfte: för att visa hur den kommunala kontrollkedjan är tänkt att fungera och hur den faktiskt ser ut i formella handlingar.`,
+    process:
+`Steg 1: Det kommunala bolaget
+Kommunala bolag är aktiebolag som ägs av kommunen, ofta via ett moderbolag. De leds av styrelse och verkställande direktör och omfattas av aktiebolagslagen. Varje år upprättar bolaget en årsredovisning som redovisar ekonomi, verksamhet och förvaltning för det gångna året.
+
+Steg 2: Auktoriserad revision
+Årsredovisningen granskas av en auktoriserad revisor enligt aktiebolagslagen. Revisorn bedömer om redovisningen ger en rättvisande bild och om styrelse och VD kan tillstyrkas ansvarsfrihet. Revisionen avser formell redovisning och laglighet – inte politiska eller straffrättsliga bedömningar.
+
+Steg 3: Lekmannarevision
+Parallellt granskar lekmannarevisorer verksamheten på uppdrag av kommunfullmäktige. De bedömer om verksamheten är ändamålsenlig, ekonomiskt tillfredsställande och om den interna kontrollen är tillräcklig. Lekmannarevisionen är en del av den kommunala ägarstyrningen.
+
+Steg 4: Kommunstyrelsen
+Kommunstyrelsen bereder ärendet, vanligtvis genom kommunstyrelsekontoret. Tjänsteskrivelser sammanfattar bolagets handlingar och revisionens bedömningar samt innehåller förslag till beslut.
+
+Steg 5: Kommunfullmäktige
+Kommunfullmäktige fattar slutligt beslut i ägarfrågor, såsom godkännande av årsredovisning och ansvarsfrihet. Eventuellt jäv ska anmälas och hanteras enligt regelverket.
+
+Vad ansvarsfrihet innebär – och inte innebär
+Ansvarsfrihet innebär att ägaren godkänner förvaltningen för det aktuella räkenskapsåret och att inga krav riktas mot styrelse eller VD utifrån det granskade materialet.
+Ansvarsfrihet innebär inte att straffrättsligt ansvar prövas, att framtida ansvar utesluts eller att andra myndigheters granskning ersätts.`,
+    press:
+`Under våren har offentliga handlingar kopplade till kommunala bolag i Sundsvall begärts ut och sammanställts.
+
+Arbetet syftar till att dokumentera och förklara den formella process som leder fram till politiska beslut om ansvarsfrihet – inte att dra slutsatser om brott eller peka ut ansvar.
+
+Materialet omfattar samtliga led i kontrollkedjan: bolagshandlingar, revision, lekmannarevision samt beslut i kommunstyrelse och kommunfullmäktige.
+
+Resultatet är ett verifierat och strukturerat underlag som visar hur systemet fungerar på papper och vilka bedömningar som faktiskt görs i respektive steg.
+
+Underlaget kan användas som faktastöd eller bakgrund i vidare journalistisk granskning.`
+  },
   disclaimers: {
     neutral:
       "Den här webbplatsen är opolitisk och dokumentdriven. Inga personer tillskrivs skuld. Endast verifierbara handlingar och beslut redovisas.",
     work:
       "Arbetsytan är ett pågående spårnings- och strukturmaterial. Den kan innehålla frågor och luckor. Det är inte en färdig slutsats."
-  }
+  },
+  externalTools: [
+    {
+      name: "Kommunala inköp/fakturor (extern sök)",
+      url: "https://kommun.jensnylander.com/",
+      note: "Externt verktyg för att hitta spår. Uppgifter behöver alltid verifieras mot originalhandling."
+    }
+  ]
 };
 
 const STATUS = {
@@ -338,12 +418,12 @@ const STATUS = {
 };
 
 const THREADS = [
-  { id: "nk", name: "Norra Kajen", summary: "Styrkedja, beslut och handlingar kopplade till Norra Kajen-bolag.", tags: ["Kommunala bolag","Revision","Tidslinje"] },
-  { id: "sb", name: "Stadsbacken", summary: "Koncernstyrning och uppsikt över kommunala bolag.", tags: ["Koncern","Ägarstyrning","Intern kontroll"] }
+  { id: "nk", name: "Sundsvall: Norra Kajen", summary: "Kommunala bolag, revision och beslutskedja kopplad till Norra Kajen.", tags: ["Kommunala bolag","Revision","Tidslinje"], scope: "Sundsvall" },
+  { id: "sb", name: "Sundsvall: Stadsbacken", summary: "Koncernstyrning och uppsikt över kommunala bolag.", tags: ["Koncern","Ägarstyrning","Intern kontroll"], scope: "Sundsvall" },
+  { id: "next", name: "Nästa tråd", summary: "Här publiceras nya granskningar när underlag finns. Inget antas – dokument först.", tags: ["Kommer snart","Dokumentinsamling"], scope: "Fler kommuner" }
 ];
 
 const DOCUMENTS = [
-  // Grunddokument (du kan fylla publika länkar senare)
   {
     id: "ks-2025-03-17",
     title: "Kommunstyrelsen – Protokoll 2025-03-17",
@@ -369,7 +449,6 @@ const DOCUMENTS = [
     source: "Offentlig handling"
   },
 
-  // Norra Kajen Holding AB – mottaget (lägg in dina Veridocs-länkar)
   {
     id: "nk-holding-ar-2024",
     title: "Norra Kajen Holding AB – Årsredovisning 2024 (signerad)",
@@ -407,7 +486,6 @@ const DOCUMENTS = [
     source: "Utlämnad av Sundsvalls kommun"
   },
 
-  // Nästa steg – begärda handlingar
   {
     id: "nk-utveckling-pack-2024",
     title: "Norra Kajen Utveckling AB – ÅR/RB/GR 2024",
@@ -434,7 +512,7 @@ const DOCUMENTS = [
   },
   {
     id: "nk-kvarter-pack-2024",
-    title: "Norra Kajen Kvarter 3/8/11/13 AB – ÅR/RB/GR 2024",
+    title: "Norra Kajen Kvarter 3 AB, Kvarter 8 AB, Kvarter 11 AB samt Kvarter 13 AB – ÅR/RB/GR 2024",
     date: "2025",
     thread: "nk",
     type: "Årsredovisning / Revision",
@@ -475,13 +553,21 @@ const TIMELINE = [
  * UI / ROUTER
  * =====================================================
  */
-
 const $ = (sel) => document.querySelector(sel);
 
 function setActiveNav(path){
-  const map = { "/public":"nav-public", "/work":"nav-work", "/method":"nav-method", "/about":"nav-about" };
-  Object.values(map).forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute("aria-current","false"); });
-  const id = map[path] || "nav-public";
+  const map = {
+    "/home":"nav-home",
+    "/public":"nav-public",
+    "/work":"nav-work",
+    "/method":"nav-method",
+    "/about":"nav-about"
+  };
+  Object.values(map).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.setAttribute("aria-current","false");
+  });
+  const id = map[path] || "nav-home";
   const el = document.getElementById(id);
   if(el) el.setAttribute("aria-current","page");
 }
@@ -506,7 +592,7 @@ function escapeHtml(str){
 
 function statusChip(key){
   const s = STATUS[key] || {label:"Okänd", dot:"warn"};
-  return `<span class="chip"><span class="dot ${s.dot}"></span>${s.label}</span>`;
+  return `<span class="chip"><span class="dot ${s.dot}"></span>${escapeHtml(s.label)}</span>`;
 }
 
 function threadName(id){
@@ -532,7 +618,7 @@ function renderToolbar(){
       <input id="q" type="search" placeholder="Sök (titel, datum, typ, noteringar)…" />
       <select id="filterThread">
         <option value="">Alla trådar</option>
-        ${THREADS.map(t=>`<option value="${t.id}">${escapeHtml(t.name)}</option>`).join("")}
+        ${THREADS.filter(t=>t.id!=="next").map(t=>`<option value="${t.id}">${escapeHtml(t.name)}</option>`).join("")}
       </select>
       <select id="filterStatus">
         <option value="">Alla status</option>
@@ -629,24 +715,20 @@ function isPublicDoc(d){
   return d.status === "received" || hasRealUrl;
 }
 
-/* NEW: Banner metrics */
 function updateStatusBanner(){
   const total = DOCUMENTS.length;
   const received = DOCUMENTS.filter(d => d.status === "received").length;
   const requested = DOCUMENTS.filter(d => d.status === "requested").length;
   const other = total - received - requested;
 
-  const metrics = [
-    { label: "Mottagna", value: received, dot: "good" },
-    { label: "Begärda", value: requested, dot: "warn" },
-    { label: "Övriga status", value: other, dot: "warn" }
-  ];
-
   const el = $("#statusMetrics");
-  if(!el) return;
-  el.innerHTML = metrics.map(m => `
-    <span class="chip"><span class="dot ${m.dot}"></span>${m.label}: ${m.value}</span>
-  `).join("");
+  if(el){
+    el.innerHTML = `
+      <span class="chip"><span class="dot good"></span>Mottagna: ${received}</span>
+      <span class="chip"><span class="dot warn"></span>Begärda: ${requested}</span>
+      <span class="chip"><span class="dot warn"></span>Övriga: ${other}</span>
+    `;
+  }
 
   const text = $("#statusText");
   if(text){
@@ -657,18 +739,159 @@ function updateStatusBanner(){
   }
 }
 
+function latestUpdates(limit=6){
+  const docs = DOCUMENTS.slice()
+    .sort((a,b)=> (String(a.date) < String(b.date) ? 1 : -1))
+    .slice(0, limit);
+  return docs.map(d => ({
+    title: d.title,
+    date: fmtDate(d.date),
+    thread: threadName(d.thread),
+    status: d.status
+  }));
+}
+
+function threadStats(threadId){
+  const docs = DOCUMENTS.filter(d => d.thread === threadId);
+  const received = docs.filter(d => d.status === "received").length;
+  const requested = docs.filter(d => d.status === "requested").length;
+  const total = docs.length;
+  return { total, received, requested };
+}
+
+function renderHome(){
+  setActiveNav("/home");
+  renderHero({
+    title: "Startsida",
+    desc: "Löpsedel och översikt. Här ser du pågående trådar, senaste uppdateringar och snabb åtkomst till metod och källor.",
+    chips: ["Opolitiskt", "Dokumentdrivet", "För medborgare & journalister"]
+  });
+
+  const updates = latestUpdates(6);
+
+  $("#mainCard").innerHTML = `
+    <h3>Översikt</h3>
+    <div class="item">
+      <div class="note">${escapeHtml(SITE.text.lead)}</div>
+      <div class="btnRow">
+        <a class="btn" href="#/public">Gå till Fakta (publikt)</a>
+        <a class="btn secondary" href="#/method">Läs Metod</a>
+        <a class="btn secondary" href="#/work">Se Arbetsyta</a>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <h3>Pågående trådar</h3>
+    <div class="cards">
+      ${THREADS.map(t=>{
+        if(t.id==="next"){
+          return `
+            <div class="bigCard">
+              <h4>${escapeHtml(t.name)}</h4>
+              <p>${escapeHtml(t.summary)}</p>
+              <div class="row">
+                ${t.tags.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}
+              </div>
+              <div class="note" style="margin-top:10px">
+                Tips: Använd “Arbetsyta” för att spåra begärda handlingar och “Metod” för att förstå publiceringsreglerna.
+              </div>
+            </div>
+          `;
+        }
+        const st = threadStats(t.id);
+        return `
+          <div class="bigCard">
+            <h4>${escapeHtml(t.name)}</h4>
+            <p>${escapeHtml(t.summary)}</p>
+            <div class="row">
+              <span class="pill"><strong>Område:</strong> ${escapeHtml(t.scope || "—")}</span>
+              <span class="pill"><strong>Dokument:</strong> ${st.total}</span>
+              <span class="pill"><strong>Mottagna:</strong> ${st.received}</span>
+              <span class="pill"><strong>Begärda:</strong> ${st.requested}</span>
+            </div>
+            <div class="btnRow">
+              <a class="btn secondary" href="#/public">Se publika dokument</a>
+              <a class="btn secondary" href="#/work">Se arbetsyta</a>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+
+    <div class="hr"></div>
+    <h3>Senaste uppdateringar</h3>
+    <div class="list">
+      ${updates.map(u=>`
+        <div class="item">
+          <div class="itemTop">
+            <div>
+              <h4>${escapeHtml(u.title)}</h4>
+              <div class="meta">${escapeHtml(u.date)} • Tråd: ${escapeHtml(u.thread)}</div>
+            </div>
+            <div>${statusChip(u.status)}</div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  $("#sideCard").innerHTML = `
+    <h3>Vad är detta?</h3>
+    <div class="successBox">
+      <div class="small">
+        <strong>Dokumentdriven sammanställning.</strong><br/>
+        Vi publicerar enbart sådant som kan hänvisas till offentliga handlingar och beslut.
+      </div>
+    </div>
+
+    <div class="warningBox">
+      <div class="small">
+        <strong>Inga slutsatser om skuld.</strong><br/>
+        Inga personer pekas ut. Vi beskriver process och handlingar — inte motiv eller brottsligt ansvar.
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <h3>Snabbguide</h3>
+    <div class="item">
+      <div class="note">
+        <strong>Startsida</strong> = översikt och trådar.<br/>
+        <strong>Fakta</strong> = verifierade dokument.<br/>
+        <strong>Arbetsyta</strong> = pågående spårning.<br/>
+        <strong>Metod</strong> = hur vi jobbar och varför.
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <h3>Verktyg & källor</h3>
+    <div class="item">
+      <div class="note">
+        Externa verktyg kan ge spår – allt behöver verifieras mot originalhandling.
+      </div>
+      <div class="list">
+        ${SITE.externalTools.map(t=>`
+          <div class="item">
+            <h4>${escapeHtml(t.name)}</h4>
+            <div class="note">${escapeHtml(t.note)}</div>
+            <div class="row"><span class="pill"><a href="${t.url}" target="_blank" rel="noopener">Öppna</a></span></div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
 function renderPublic(){
   setActiveNav("/public");
   renderHero({
     title: "Fakta (publikt)",
     desc: "Sammanställning för allmänheten. Endast verifierbara uppgifter från offentliga handlingar och beslut. Inga personer pekas ut.",
-    chips: ["Dokumentdrivet", "Opolitiskt", "Källhänvisat"]
+    chips: ["Verifierat", "Källhänvisat", "Neutral ton"]
   });
 
-  const main = $("#mainCard");
-  main.innerHTML = `
+  $("#mainCard").innerHTML = `
     <h3>Dokument & källor</h3>
-    <p class="muted">Publika listan visar automatiskt dokument som är markerade som <strong>mottagna</strong> eller som har en publik länk.</p>
+    <p class="muted">Publika listan visar dokument som är markerade som <strong>mottagna</strong> eller som har en publik länk.</p>
     ${renderToolbar()}
     <div class="list" id="docsList"></div>
 
@@ -678,8 +901,7 @@ function renderPublic(){
     <div class="list" id="timelineList"></div>
   `;
 
-  const side = $("#sideCard");
-  side.innerHTML = `
+  $("#sideCard").innerHTML = `
     <h3>Så läser du sidan</h3>
     <div class="item">
       <div class="note">
@@ -697,17 +919,10 @@ function renderPublic(){
       </div>
     </div>
 
-    <div class="warningBox">
-      <div><strong>Inga slutsatser om skuld.</strong></div>
-      <div class="muted small" style="margin-top:6px">
-        Sidan beskriver beslut, process och dokument — inte motiv eller brottsligt ansvar.
-      </div>
-    </div>
-
     <details style="margin-top:12px">
-      <summary>Publiceringsregel (kort)</summary>
+      <summary>Varför vissa dokument saknar länk?</summary>
       <div class="note">
-        1) Inget antas. 2) Inget personfokus. 3) Källor först. 4) Fel rättas öppet med datum.
+        Dokument kan vara mottagna men ännu inte publicerade med publik länk. Då står det “Ingen länk ännu”.
       </div>
     </details>
 
@@ -719,8 +934,8 @@ function renderPublic(){
 
   const docsEl = $("#docsList");
   const tlEl = $("#timelineList");
-
   const baseDocs = DOCUMENTS.filter(isPublicDoc);
+
   docsEl.innerHTML = renderDocumentsList(baseDocs);
   tlEl.innerHTML = renderTimeline(TIMELINE);
 
@@ -741,8 +956,7 @@ function renderWork(){
     chips: ["Spårning", "Begärda handlingar", "Öppna frågor"]
   });
 
-  const main = $("#mainCard");
-  main.innerHTML = `
+  $("#mainCard").innerHTML = `
     <h3>Alla dokument (inkl. begärda)</h3>
     <p class="muted">${escapeHtml(SITE.disclaimers.work)}</p>
     ${renderToolbar()}
@@ -770,8 +984,7 @@ function renderWork(){
     </div>
   `;
 
-  const side = $("#sideCard");
-  side.innerHTML = `
+  $("#sideCard").innerHTML = `
     <h3>Checklista – “alert men låg”</h3>
     <div class="item">
       <div class="note">
@@ -780,18 +993,6 @@ function renderWork(){
         <strong>Dag 6–7:</strong> Begär formellt beslut om utlämnande om inget händer.<br/>
         <strong>Vid maskning:</strong> Be om lagrum och beslut (för överklagande).
       </div>
-    </div>
-
-    <div class="hr"></div>
-    <h3>Trådar</h3>
-    <div class="list">
-      ${THREADS.map(t=>`
-        <div class="item">
-          <h4>${escapeHtml(t.name)}</h4>
-          <div class="note">${escapeHtml(t.summary)}</div>
-          <div class="row">${t.tags.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}</div>
-        </div>
-      `).join("")}
     </div>
 
     <div class="hr"></div>
@@ -822,30 +1023,14 @@ function renderMethod(){
   });
 
   $("#mainCard").innerHTML = `
-    <h3>Grundprinciper</h3>
+    <h3>Syfte och avgränsning</h3>
     <div class="item">
-      <div class="note">
-        <strong>1) Dokument först.</strong> Uppgifter publiceras bara när de kan hänvisas till en handling (protokoll, beslut, revisionsdokument, diarieförd kommunikation).<br/><br/>
-        <strong>2) Inga skuldutpekanden.</strong> Inga personer pekas ut. Inga motiv tillskrivs. Eventuella brottsmisstankar hanteras av rättsvårdande myndigheter, inte här.<br/><br/>
-        <strong>3) Tydlig skillnad mellan fakta och process.</strong> Vi beskriver hur styrkedjan fungerar, vilka beslut som fattats, och vad som kan observeras i dokumenten.<br/><br/>
-        <strong>4) Rättelser är synliga.</strong> Om fel upptäcks publiceras en rättelse med datum och vad som ändrats.
-      </div>
+      <div class="note">${escapeHtml(SITE.text.intro).replaceAll("\n\n","<br/><br/>").replaceAll("\n","<br/>")}</div>
     </div>
 
-    <h3 style="margin-top:12px">Offentlighetsprincipen</h3>
+    <h3 style="margin-top:12px">Så går processen till</h3>
     <div class="item">
-      <div class="note">
-        Begäran om allmän handling görs enligt <strong>Tryckfrihetsförordningen, 2 kap.</strong>
-        Vid maskning/avslag ska lagrum anges och formellt beslut kunna begäras.
-      </div>
-    </div>
-
-    <h3 style="margin-top:12px">Publiceringsregel (A)</h3>
-    <div class="item">
-      <div class="note">
-        I publik vy visas automatiskt dokument som är markerade som <code class="inline">received</code> samt dokument med publik länk.
-        Begärda/dröjande dokument syns endast i arbetsytan.
-      </div>
+      <div class="note">${escapeHtml(SITE.text.process).replaceAll("\n\n","<br/><br/>").replaceAll("\n","<br/>")}</div>
     </div>
   `;
 
@@ -860,12 +1045,11 @@ function renderMethod(){
     </div>
 
     <div class="hr"></div>
-    <h3>Faktaruta (mall)</h3>
+    <h3>Publiceringsregel</h3>
     <div class="item">
       <div class="note">
-        <strong>Vad vet vi?</strong> (punkter + källor)<br/>
-        <strong>Vad vet vi inte?</strong> (vilka handlingar saknas)<br/>
-        <strong>Nästa steg:</strong> (vilka dokument inväntas)
+        I publik vy visas dokument som är markerade som <code class="inline">received</code> samt dokument med publik länk.
+        Begärda/dröjande dokument syns endast i arbetsytan.
       </div>
     </div>
   `;
@@ -874,18 +1058,23 @@ function renderMethod(){
 function renderAbout(){
   setActiveNav("/about");
   renderHero({
-    title: "Om",
-    desc: "Upplysning, transparens och processförståelse – utan partipolitik och utan personfokus.",
-    chips: ["Opolitiskt", "Neutral ton", "Dokumentdrivet"]
+    title: "Om / Press",
+    desc: "Vem sidan är till för, vad som publiceras och hur materialet kan användas.",
+    chips: ["Opolitiskt", "Dokumentdrivet", "Kontakt"]
   });
 
   $("#mainCard").innerHTML = `
-    <h3>Syfte</h3>
+    <h3>Om</h3>
     <div class="item">
       <div class="note">
-        Den här webbplatsen är ett medborgarprojekt för att dokumentera hur beslut och styrning fungerar i praktiken,
+        Den här webbplatsen är ett medborgarprojekt för att dokumentera hur beslut och kontroll fungerar i praktiken,
         särskilt kring kommunala bolag och offentliga handlingar. Innehållet bygger på offentlig information.
       </div>
+    </div>
+
+    <h3 style="margin-top:12px">För journalister</h3>
+    <div class="item">
+      <div class="note">${escapeHtml(SITE.text.press).replaceAll("\n\n","<br/><br/>").replaceAll("\n","<br/>")}</div>
     </div>
 
     <h3 style="margin-top:12px">Kontakt</h3>
@@ -897,9 +1086,7 @@ function renderAbout(){
 
     <h3 style="margin-top:12px">Ansvarsfriskrivning</h3>
     <div class="item">
-      <div class="note">
-        ${escapeHtml(SITE.disclaimers.neutral)}
-      </div>
+      <div class="note">${escapeHtml(SITE.disclaimers.neutral)}</div>
     </div>
   `;
 
@@ -922,15 +1109,17 @@ function renderAbout(){
 }
 
 function route(){
-  const hash = (location.hash || "#/public").replace("#", "");
-  const path = hash.startsWith("/") ? hash : "/public";
+  const hash = (location.hash || "#/home").replace("#", "");
+  const path = hash.startsWith("/") ? hash : "/home";
+
   document.title = SITE.title;
   $("#subhead").textContent = SITE.subtitle;
 
+  if(path === "/public") return renderPublic();
   if(path === "/work") return renderWork();
   if(path === "/method") return renderMethod();
   if(path === "/about") return renderAbout();
-  return renderPublic();
+  return renderHome();
 }
 
 window.addEventListener("hashchange", route);
